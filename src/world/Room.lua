@@ -249,7 +249,8 @@ function Room:generateObjects(doorways_lrtb)
         spawn_ground_tile.is_occupied = true
 
         -- object hitbox definitions get converted into hitbox objects.
-        -- The new hitboxes key overwrites the old one inside the objects def. Thats why the OBJECT_DEFS need to be deepcopied.
+        -- The new hitboxes key overwrites the old one inside the objects def.
+        -- GAME_OBJECT_DEFS must be deepcopied to not get modified.
         local switch_def = deepcopy(GAME_OBJECT_DEFS['switch'])
         table.extend(switch_def, {
             x = spawn_ground_tile.x, y = spawn_ground_tile.y,

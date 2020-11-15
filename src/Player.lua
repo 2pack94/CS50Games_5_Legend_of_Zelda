@@ -11,7 +11,8 @@ Player = Class{__includes = Entity}
 function Player:init(x, y, dungeon)
     -- construct the complete definition for the Player
     -- Player hitbox definitions get converted into hitbox objects.
-    -- The new hitboxes key overwrites the old one inside player_def. Thats why the ENTITY_DEFS need to be deepcopied.
+    -- The new hitboxes key overwrites the old one inside player_def.
+    -- ENTITY_DEFS must be deepcopied to not get modified.
     local player_def = deepcopy(ENTITY_DEFS['player'])
     table.extend(player_def, {
         x = x, y = y,
