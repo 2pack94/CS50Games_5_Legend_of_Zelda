@@ -16,7 +16,10 @@ function PlayState:init()
     self.dungeon = Dungeon(self.player)
     self.player.dungeon = self.dungeon
 
+    -- store the state if a State change occurs.
     self.new_state, self.new_state_params = nil, nil
+    -- if game is paused
+    self.is_pause = false
 
     -- transition alpha for fade out to Game Over screen
     self.transition_alpha = 0
@@ -42,7 +45,7 @@ end
 
 function PlayState:update(dt)
     -- toggle pause
-    if keyboardWasPressed('p') or keyboardWasPressed('kp-') then
+    if keyboardWasPressed(KEYS_PAUSE) then
         if self.is_pause then
             gSounds['confirm']:play()
         else

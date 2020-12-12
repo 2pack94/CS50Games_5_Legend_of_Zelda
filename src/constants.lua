@@ -49,6 +49,7 @@ CREATURE_HEART_DROP_P = 0.08
 -- player controls (movement keys are hardcoded on WASD and arrow keys)
 KEYS_ATTACK = {'space', 'kp2'}      -- swing the sword
 KEYS_GRAB = {'e', 'kp1'}            -- lift up a pot
+KEYS_PAUSE = {'p', 'kp-'}           -- pause the game
 
 -- an entity goes invulnerable if hit by something. The entity sprite will then render as flashing.
 INVULNERABILITY_DURATION = 1.5          -- in seconds

@@ -1,6 +1,5 @@
 --[[
     GD50
-    Match-3 Remake
 
     -- BaseState Class --
 
