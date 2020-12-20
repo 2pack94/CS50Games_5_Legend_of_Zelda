@@ -21,7 +21,7 @@ end
 function GameOverState:update(dt)
     if keyboardWasPressed('escape') then
         love.event.quit()
-    elseif next(getKeysPressed()) then
+    elseif keyboardWasPressed(KEYS_CONFIRM) then
         gSounds['confirm']:play()
         gStateMachine:change('start')
     end

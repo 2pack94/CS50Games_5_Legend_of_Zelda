@@ -63,6 +63,17 @@ function table.extend(table1, table2)
 	end
 end
 
+-- unpack a table
+-- Love2D 11.3 uses Lua 5.1, where table.unpack is not implemented yet.
+-- t: table that gets converted to multiple return values
+-- the second argument 'i' must not be supplied (must be nil)
+function table.unpack(t, i)
+    i = i or 1
+    if t[i] ~= nil then
+        return t[i], table.unpack(t, i + 1)
+    end
+end
+
 --[[
     recursively deepcopy a table.
     the second argument 'copies' must not be supplied (must be nil)

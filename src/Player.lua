@@ -57,18 +57,18 @@ function Player:doMovement(dt, animation_base_name)
     -- store the vertical and horizontal direction that is moved towards in a list
     local direction_list = {}
 
-    if love.keyboard.isDown('left', 'a') then
+    if love.keyboard.isDown(table.unpack(KEYS_LEFT)) then
         table.insert(direction_list, 'left')
         self.dx = -self.move_speed
-    elseif love.keyboard.isDown('right', 'd') then
+    elseif love.keyboard.isDown(table.unpack(KEYS_RIGHT)) then
         table.insert(direction_list, 'right')
         self.dx = self.move_speed
     end
 
-    if love.keyboard.isDown('up', 'w') then
+    if love.keyboard.isDown(table.unpack(KEYS_UP)) then
         table.insert(direction_list, 'up')
         self.dy = -self.move_speed
-    elseif love.keyboard.isDown('down', 's') then
+    elseif love.keyboard.isDown(table.unpack(KEYS_DOWN)) then
         table.insert(direction_list, 'down')
         self.dy = self.move_speed
     end

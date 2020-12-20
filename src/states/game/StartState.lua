@@ -16,7 +16,7 @@ end
 function StartState:update(dt)
     if keyboardWasPressed('escape') then
         love.event.quit()
-    elseif next(getKeysPressed()) then
+    elseif keyboardWasPressed(KEYS_CONFIRM) then
         gSounds['confirm']:play()
         gStateMachine:change('play')
     end
@@ -36,5 +36,5 @@ function StartState:render()
 
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.setFont(gFonts['zelda-small'])
-    love.graphics.printf('Press any Key', 0, VIRTUAL_HEIGHT / 2 + 64, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Press Enter', 0, VIRTUAL_HEIGHT / 2 + 64, VIRTUAL_WIDTH, 'center')
 end

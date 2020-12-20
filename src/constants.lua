@@ -46,10 +46,15 @@ CREATURE_BAT_MOVE_SPEED = 30
 -- probability for an enemy to drop a heart when killed
 CREATURE_HEART_DROP_P = 0.08
 
--- player controls (movement keys are hardcoded on WASD and arrow keys)
+-- player controls
+KEYS_CONFIRM = {'e', 'kp1', 'return'}
 KEYS_ATTACK = {'space', 'kp2'}      -- swing the sword
 KEYS_GRAB = {'e', 'kp1'}            -- lift up a pot
 KEYS_PAUSE = {'p', 'kp-'}           -- pause the game
+KEYS_LEFT = {'left', 'a'}           -- movement
+KEYS_RIGHT = {'right', 'd'}
+KEYS_UP = {'up', 'w'}
+KEYS_DOWN = {'down', 's'}
 
 -- an entity goes invulnerable if hit by something. The entity sprite will then render as flashing.
 INVULNERABILITY_DURATION = 1.5          -- in seconds
