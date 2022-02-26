@@ -82,11 +82,10 @@ function Entity:init(def)
     self.carry = nil
 
     -- render order:
-    --  primarily defined by render_prio
-    --  secondarily defined by the order of the lists inside the Room Class (entities get rendered after objects)
-    --  thirdly defined by the order of entities in the entity list of the current room
-    -- lower numbers mean a lower priority. The entity with the highest priority will be drawn last (over the others).
-    self.render_prio = self.render_prio or 1
+    -- Primarily defined by render_prio. Lower numbers mean a lower priority.
+    -- The entity with the highest priority will be drawn last (over the others).
+    -- Secondarily defined by y coordinate (entities/ objects with lower y get rendered first).
+    self.render_prio = def.render_prio or RENDER_PRIO_2
 
     -- ID to differentiate between entities
     self.id = def.id
@@ -207,7 +206,6 @@ function Entity:onDeath()
                 hitboxes = getHitboxesFromDefinition(heart_def.hitboxes)
             })
             table.insert(self.dungeon.current_room.objects, GameObject(heart_def))
-            self.dungeon.current_room:renderListSync()
         end)
     end
 end
@@ -478,6 +476,8 @@ function Entity:render(shift_screen_offset_x, shift_screen_offset_y)
     -- get the current frame and texture from the Animation class
     love.graphics.draw(gTextures[self.current_animation.texture], gFrames[self.current_animation.texture][self.current_animation:getCurrentFrame()],
         math.floor(x), math.floor(y))
+
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
     if IS_DEBUG then
         love.graphics.setColor(255/255, 0/255, 255/255, 255/255)

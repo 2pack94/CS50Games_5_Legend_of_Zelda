@@ -84,8 +84,8 @@ function GameObject:init(def)
     -- name of the sound that should play when the object gets hit/ destroyed
     self.hit_sound = def.hit_sound
 
-    -- lower numbers mean a lower priority. The object with the highest priority will be drawn last (over the others). (see Entity Class)
-    self.render_prio = self.render_prio or 1
+    -- Explanation see Entity Class
+    self.render_prio = def.render_prio or RENDER_PRIO_1
 
     -- simple state machine (optional)
     -- table of all possible state names

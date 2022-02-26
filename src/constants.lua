@@ -46,6 +46,14 @@ CREATURE_BAT_MOVE_SPEED = 30
 -- probability for an enemy to drop a heart when killed
 CREATURE_HEART_DROP_P = 0.08
 
+-- Render Priority constants. Used to define the render order.
+-- used for objects on the floor.
+RENDER_PRIO_1 = 1
+-- used for entities/ larger objects.
+RENDER_PRIO_2 = 2
+-- used for objects that are above the head.
+RENDER_PRIO_3 = 3
+
 -- player controls
 KEYS_CONFIRM = {'e', 'kp1', 'return'}
 KEYS_ATTACK = {'space', 'kp2'}      -- swing the sword

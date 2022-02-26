@@ -42,11 +42,13 @@ function Room:init(room_x, room_y, player, dungeon, doorways_lrtb)
     table.insert(self.entities, player)
     self:generateEntities()
 
-    self:renderListSync()
-
     -- render offset used when this room is the next room during a room transition
     self.shift_screen_offset_x = 0
     self.shift_screen_offset_y = 0
+
+    -- list of objects and entities that shall be rendered to the screen.
+    -- the elements will be drawn after all elements in self.tiles
+    self.render_list = {}
 end
 
 -- generate the walls and floors of the room
@@ -449,18 +451,25 @@ function Room:generateEntities()
     end
 end
 
--- this function must be called every time there was a change to the render_prio of an object/ entity
--- or an object/ entity got removed or added
--- create a sorted render list that is used to draw objects and entities in the render function
+-- This function is called every frame before rendering.
+-- Create a sorted render list that is used to draw objects and entities in the render function
 function Room:renderListSync()
-    -- list of objects and entities that shall be rendered to the screen in this order.
-    -- the elements will be drawn after all elements in self.tiles
     self.render_list = {}
     table.extend(self.render_list, self.objects)
     table.extend(self.render_list, self.entities)
-    -- order self.render_list after the render_prio of each element.
-    -- the element with the highest render_prio will be last in the list (drawn on top).
-    -- the order of the elements with the same render_prio will not be changed (stable sorting algorithm necessary).
+
+    -- Order self.render_list after the y coordinate of the first hitbox (secondary ordering).
+    -- Using the hitbox is better than using the y coordinate. E.g. a long pillar has only a hitbox
+    -- at the bottom of its sprite and an entity must be drawn behind the pillar if standing above the hitbox.
+    self.elem_y_list = {}
+    for _, elem in pairs(self.render_list) do
+        table.insert(self.elem_y_list, elem.hitboxes[1].y)
+    end
+    self.render_list, self.elem_y_list = sortStableWithHelperTbl(self.render_list, self.elem_y_list)
+
+    -- Order self.render_list after the render_prio of each element (primary ordering).
+    -- The element with the highest render_prio will be last in the list (drawn on top).
+    -- The order of the elements with the same render_prio will not be changed (stable sorting algorithm necessary).
     self.render_prio_list = {}
     for _, elem in pairs(self.render_list) do
         table.insert(self.render_prio_list, elem.render_prio)
@@ -489,11 +498,9 @@ function Room:update(dt)
     -- remove entities and objects that have their is_remove member set.
     -- iterate backwards to not skip the element that comes after a removed element
     -- (when removing, all elements after the removed one decrement their index)
-    local was_removal = false
     for i = #self.objects, 1, -1 do
         if self.objects[i].is_remove then
             table.remove(self.objects, i)
-            was_removal = true
         end
     end
 
@@ -506,16 +513,11 @@ function Room:update(dt)
                 end
             end
             table.remove(self.entities, i)
-            was_removal = true
         end
-    end
-
-    if was_removal then
-        self:renderListSync()
     end
 end
 
--- render tiles and the objects/ entities inside self.render_list in this order
+-- render tiles and the objects/ entities inside self.render_list
 function Room:render()
     -- Both the current room and the next room have a player reference that gets rendered during a room transition.
     -- But because the next room gets rendered at shift_screen_offset, the player in the next room is constantly rendered off screen.
@@ -542,6 +544,8 @@ function Room:render()
     -- The stenciled pixels will draw over everything, because things that drawn later are affected by the stenciling and
     -- things that are drawn before are overdrawn by this object anyways.
     -- because keepvalues=true, the stencil values from the next room apply also in the current room.
+
+    self:renderListSync()
 
     -- start stencil testing
     love.graphics.setStencilTest('less', 1)

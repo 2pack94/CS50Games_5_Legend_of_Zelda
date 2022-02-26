@@ -56,6 +56,7 @@ GAME_OBJECT_DEFS = {
         width = TILE_SIZE * 2,
         height = TILE_SIZE * 3,
         is_collidable = true,
+        render_prio = RENDER_PRIO_2,
         hitboxes = {
             {
                 x_offset = 0,
@@ -63,15 +64,7 @@ GAME_OBJECT_DEFS = {
                 width = TILE_SIZE * 2,
                 height = TILE_SIZE * 2,
             }
-        },
-        -- stencil the part that is not inside the hitbox (not on the ground), to hide objects/ entities that are behind the statue.
-        -- the stencil in the y direction should go a bit further into the sprite where the hitbox is,
-        -- so no texture can "shine through" the object when standing right behind the statue (above the hitbox)
-        -- the rightmost pixel-column in the sprite is transparent, so it does not need to be stenciled.
-        stencilFunction = function(self, shift_screen_offset_x, shift_screen_offset_y)
-            local _x, _y = self.x + shift_screen_offset_x, self.y + shift_screen_offset_y
-            love.graphics.rectangle('fill', _x, _y, TILE_SIZE * 2 - 1, TILE_SIZE + 5)
-        end
+        }
     },
     ['heart'] = {       -- is dropped by enemies and heals the player when picked up
         id = OBJECT_ID_HEART,
@@ -136,10 +129,7 @@ GAME_OBJECT_DEFS = {
                 self.mount = nil
                 self.proj_z = 0
                 self.dx, self.dy = 0, 0
-                if self.render_prio ~= 1 then
-                    self.render_prio = 1
-                    self.dungeon.current_room:renderListSync()
-                end
+                self.render_prio = RENDER_PRIO_1
             elseif new_state == 'mounted' then
                 -- if the Player lifts and carries the pot
                 self.is_collidable = false
@@ -160,8 +150,7 @@ GAME_OBJECT_DEFS = {
                 self.proj_z = self.mount.height - 6
 
                 -- set a render priority that is higher than the one of the player, to draw the pot over the player
-                self.render_prio = 2
-                self.dungeon.current_room:renderListSync()
+                self.render_prio = RENDER_PRIO_3
             elseif new_state == 'thrown' then
                 -- throw the pot in the direction in which the player was facing
                 -- it will fly in this direction and to the ground (decrement proj_z)
